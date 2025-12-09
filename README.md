@@ -31,4 +31,33 @@ Key documents (copied from the main x0tta6bl4 project):
 - `docs/technical/` — техническая архитектура.
 - `docs/operations/` — runbooks и эксплуатация.
 
+## Architecture (high-level)
+
+```text
+[Client/Service A]        [Service B]
+      |                         |
+   Envoy sidecar            Envoy sidecar
+      |                         |
+   SPIRE Agent              SPIRE Agent
+       \                      /
+        \---- SPIRE Server / CA
+```
+
+`x0tta6bl4-mesh-mvp` provides the mTLS smoke pod and helper script that plug
+into this SPIFFE/SPIRE + Envoy topology. You reuse your own SPIRE setup and
+only adapt the test pod / script to your cluster.
+
+## Troubleshooting
+
+- `spiffe-mtls-smoke` pod is not Ready:
+  - check namespace `mtls-demo` exists and SPIRE Agent socket is mounted.
+  - check SPIRE Agent is running and can reach SPIRE Server.
+- Logs do not show `[SUCCESS] mTLS probe completed successfully`:
+  - describe the pod: `kubectl describe pod spiffe-mtls-smoke -n mtls-demo`.
+  - inspect full logs (both containers) for TLS or DNS errors.
+- `mtls-smoke-check.sh` times out:
+  - verify Kubernetes context/namespace.
+  - increase `MAX_WAIT_SECONDS` in the script if your cluster is slow.
+
 License: Apache-2.0 (TODO: добавить полный текст лицензии).
+
