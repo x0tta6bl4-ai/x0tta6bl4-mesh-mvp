@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spiffe-mtls-smoke
+  namespace: mtls-demo
+spec:
+  restartPolicy: Never
+  containers:
+  - name: svid-fetch
+    image: ghcr.io/spiffe/spire-agent:1.9.5
+    securityContext:
+      runAsUser: 0
+    command:
+      - /opt/spire/bin/spire-agent
+    args:
+      - "api"
+      - "fetch"
+      - "x509"
+      - "-socketPath"
+      - "/run/spire/sockets/agent.sock"
+      - "-write"
+      - "/tmp/spire-svid"
+    volumeMounts:
+      - name: spire-socket
+        mountPath: /run/spire/sockets
+        readOnly: true
+      - name: svid-dir
+        mountPath: /tmp/spire-svid
+
+  - name: mtls-curl
+    image: curlimages/curl:8.7.1
+    securityContext:
+      runAsUser: 0
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -ex
+        echo "[INFO] Waiting for SVID files..."
+        for i in $(seq 1 30); do
+          if [ -f /tmp/spire-svid/svid.0.pem ] && [ -f /tmp/spire-svid/svid.0.key ] && [ -f /tmp/spire-svid/bundle.0.pem ]; then
+            break
+          fi
+          echo "[INFO] SVID not ready yet, sleeping... ($i)"
+          sleep 2
+        done
+        echo "[INFO] SVID files present:";
+        ls -l /tmp/spire-svid || true
+        echo "[INFO] Running mTLS probe to service-b.mtls-demo.svc.cluster.local:15443..."
+        curl -k -v --fail \
+          --cert /tmp/spire-svid/svid.0.pem \
+          --key /tmp/spire-svid/svid.0.key \
+          --cacert /tmp/spire-svid/bundle.0.pem \
+          https://service-b.mtls-demo.svc.cluster.local:15443/ || {
+            echo "[ERROR] mTLS probe failed";
+            exit 1;
+          }
+        echo "[SUCCESS] mTLS probe completed successfully";
+        sleep 300
+    volumeMounts:
+      - name: svid-dir
+        mountPath: /tmp/spire-svid
+
+  volumes:
+    - name: spire-socket
+      hostPath:
+        path: /run/spire/sockets
+        type: DirectoryOrCreate
+    - name: svid-dir
+      emptyDir: {}

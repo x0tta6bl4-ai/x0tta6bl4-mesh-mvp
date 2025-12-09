@@ -1,0 +1,144 @@
+# Requirements for x0tta6bl4 Knowledge Base (RAG System)
+# P0.2: MAPE-K RAG Knowledge Base
+
+# ============================================================================
+# Vector Store Dependencies
+# ============================================================================
+
+# ChromaDB - Lightweight vector database with built-in embeddings
+chromadb>=0.4.18
+# Persistent storage, efficient similarity search, built-in embedding functions
+
+# FAISS - Facebook AI Similarity Search (High-performance alternative)
+faiss-cpu>=1.7.4
+# For GPU support, replace with: faiss-gpu>=1.7.4
+# High-performance similarity search for large-scale deployments
+
+# Sentence Transformers - State-of-the-art text embeddings
+sentence-transformers>=2.2.2
+# Models: all-MiniLM-L6-v2 (384dim), all-mpnet-base-v2 (768dim)
+
+# ============================================================================
+# Knowledge Graph Dependencies
+# ============================================================================
+
+# NetworkX - Graph data structures and algorithms
+networkx>=3.1
+# For building causal chains, dependency graphs, root cause analysis
+
+# Neo4j Python Driver (Optional - for production-grade graph DB)
+# neo4j>=5.14.0
+# Uncomment for persistent graph storage with Cypher query language
+
+# PyVis - Network visualization (optional, for debugging)
+# pyvis>=0.3.2
+
+# ============================================================================
+# Document Processing Pipeline
+# ============================================================================
+
+# Natural Language Processing
+spacy>=3.7.0
+# For entity extraction, NER, dependency parsing
+# Download model: python -m spacy download en_core_web_sm
+
+# Document Parsers
+python-markdown>=3.5
+# Markdown document parsing
+
+PyYAML>=6.0.1
+# YAML configuration and document parsing
+
+# Text Processing
+nltk>=3.8.1
+# Tokenization, stemming, stopwords
+# Download data: python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+
+# ============================================================================
+# Retrieval System
+# ============================================================================
+
+# BM25 for keyword-based search (hybrid search)
+rank-bm25>=0.2.2
+# Sparse retrieval to complement dense vector search
+
+# Reranking models
+# cross-encoder for result reranking (optional, computationally expensive)
+# Uncomment if needed:
+# sentence-transformers includes cross-encoders
+
+# ============================================================================
+# Core ML/AI Dependencies
+# ============================================================================
+
+# NumPy - Numerical computing
+numpy>=1.24.0
+# Already included in other packages but specified for clarity
+
+# Scikit-learn - ML utilities
+scikit-learn>=1.3.0
+# For clustering, dimensionality reduction, metrics
+
+# ============================================================================
+# Utilities
+# ============================================================================
+
+# Async support
+aiofiles>=23.2.1
+# Async file I/O for document processing
+
+# Data validation
+pydantic>=2.5.0
+# Data validation and settings management
+
+# Logging and monitoring
+structlog>=23.2.0
+# Structured logging for better observability
+
+# Progress bars
+tqdm>=4.66.0
+# Progress tracking for long-running operations
+
+# ============================================================================
+# Testing Dependencies (dev)
+# ============================================================================
+
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+# pytest-cov>=4.1.0
+# pytest-benchmark>=4.0.0
+
+# ============================================================================
+# Performance Optimization (Optional)
+# ============================================================================
+
+# Numba - JIT compilation for numerical code
+# numba>=0.58.0
+
+# Joblib - Parallel processing
+# joblib>=1.3.0
+
+# ============================================================================
+# Notes
+# ============================================================================
+# 
+# Installation:
+#   pip install -r requirements-knowledge-base.txt
+#
+# GPU Support for FAISS:
+#   Replace faiss-cpu with faiss-gpu if CUDA is available
+#
+# SpaCy Model:
+#   python -m spacy download en_core_web_sm
+#   For better accuracy: python -m spacy download en_core_web_lg
+#
+# NLTK Data:
+#   python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+#
+# Memory Requirements:
+#   - ChromaDB: ~100MB base + data
+#   - FAISS: Minimal overhead, scales with index size
+#   - Sentence-transformers: ~120MB for all-MiniLM-L6-v2
+#   - SpaCy en_core_web_sm: ~13MB
+#   - SpaCy en_core_web_lg: ~800MB (better accuracy)
+#

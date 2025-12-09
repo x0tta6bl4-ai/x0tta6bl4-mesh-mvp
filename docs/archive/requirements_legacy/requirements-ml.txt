@@ -1,0 +1,12 @@
+# Machine Learning dependencies for future anomaly detection & routing optimization
+# Pin versions for reproducibility; update quarterly after security review.
+
+numpy==1.26.4
+scikit-learn==1.5.1
+pandas==2.2.2
+scipy==1.13.1
+joblib==1.4.2
+# Optional advanced packages (commented until needed)
+# lightgbm==4.3.0
+# xgboost==2.1.0
+# networkx==3.3

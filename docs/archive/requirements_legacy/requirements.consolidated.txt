@@ -1,0 +1,5 @@
+fastapi==0.110.0
+uvicorn==0.30.0
+web3==6.11.1
+# Pin httpx for FastAPI/Starlette TestClient compatibility (0.28 removed 'app' kw)
+httpx==0.27.0
