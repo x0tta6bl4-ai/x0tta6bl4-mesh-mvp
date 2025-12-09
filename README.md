@@ -47,6 +47,18 @@ Key documents (copied from the main x0tta6bl4 project):
 into this SPIFFE/SPIRE + Envoy topology. You reuse your own SPIRE setup and
 only adapt the test pod / script to your cluster.
 
+## Metrics & SLO (Pilot-0, internal)
+
+These numbers come from the internal reference deployment (Pilot-0) and serve
+as a ballpark for what the mesh can deliver on a healthy Kubernetes cluster:
+
+- **MTTR (pod failover):** ~3.1 seconds from pod delete to mTLS traffic restored.
+- **Latency overhead (service-to-service mTLS):** ~82 ms p50 over plain HTTP.
+- **Smoke test success rate:** 100% across repeated runs of `mtls-smoke-check.sh`.
+
+These are *observed* metrics, not a contractual SLA. For production pilots,
+you should benchmark in your own cluster and adjust SLOs accordingly.
+
 ## Troubleshooting
 
 - `spiffe-mtls-smoke` pod is not Ready:
