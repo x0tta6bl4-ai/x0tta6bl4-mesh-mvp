@@ -47,17 +47,16 @@ Key documents (copied from the main x0tta6bl4 project):
 into this SPIFFE/SPIRE + Envoy topology. You reuse your own SPIRE setup and
 only adapt the test pod / script to your cluster.
 
-## Metrics & SLO (Pilot-0, internal)
+## Validation boundary
 
-These numbers come from the internal reference deployment (Pilot-0) and serve
-as a ballpark for what the mesh can deliver on a healthy Kubernetes cluster:
+This MVP is meant for:
 
-- **MTTR (pod failover):** ~3.1 seconds from pod delete to mTLS traffic restored.
-- **Latency overhead (service-to-service mTLS):** ~82 ms p50 over plain HTTP.
-- **Smoke test success rate:** 100% across repeated runs of `mtls-smoke-check.sh`.
+- smoke-testing SPIFFE/SPIRE wiring
+- checking that mTLS is actually alive in your cluster
+- giving a small pilot bundle instead of a full platform repository
 
-These are *observed* metrics, not a contractual SLA. For production pilots,
-you should benchmark in your own cluster and adjust SLOs accordingly.
+It is **not** presented here as a production SLA or a universal benchmark.
+If you want latency, failover, or recovery numbers, measure them in your own cluster.
 
 ## Troubleshooting
 
@@ -71,5 +70,4 @@ you should benchmark in your own cluster and adjust SLOs accordingly.
   - verify Kubernetes context/namespace.
   - increase `MAX_WAIT_SECONDS` in the script if your cluster is slow.
 
-License: Apache-2.0 (TODO: добавить полный текст лицензии).
-
+License: Apache-2.0. See `LICENSE`.
